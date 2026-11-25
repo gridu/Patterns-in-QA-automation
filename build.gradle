@@ -1,0 +1,48 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.shop'
+version = '1.0.0'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // JUnit 6
+    testImplementation platform('org.junit:junit-bom:6.1.3')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // Selenium
+    testImplementation 'org.seleniumhq.selenium:selenium-java:4.29.0'
+
+    // Database access (JDBC)
+    testImplementation 'org.postgresql:postgresql:42.7.14'
+    testImplementation 'org.xerial:sqlite-jdbc:3.47.2.0'
+
+    // JSON handling for plain HTTP requests
+    testImplementation 'com.fasterxml.jackson.core:jackson-databind:2.18.12'
+
+    // Logger
+    testImplementation 'org.slf4j:slf4j-simple:2.0.17'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+        showStandardStreams = true
+    }
+    // Allow passing headless or browser options if desired
+    systemProperty 'headless', System.getProperty('headless', 'true')
+    systemProperty 'webdriver.chrome.silentOutput', 'true'
+    systemProperty 'java.util.logging.config.file', "${projectDir}/src/test/resources/logging.properties"
+}

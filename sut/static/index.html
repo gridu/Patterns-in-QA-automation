@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Shop - SUT</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar" data-testid="navbar">
+    <a href="#" id="brand-link" class="nav-brand">Simple Shop</a>
+
+    <div class="nav-actions">
+      <!-- Guest Controls -->
+      <div id="guest-actions">
+        <button id="nav-login-btn" class="btn btn-outline" data-testid="nav-login-btn">Login</button>
+        <button id="nav-register-btn" class="btn btn-primary" data-testid="nav-register-btn">Register</button>
+      </div>
+
+      <!-- Authenticated Controls -->
+      <div id="user-actions" class="hidden">
+        <span id="current-username" class="username-badge" data-testid="current-username"></span>
+        <button id="nav-logout-btn" class="btn btn-outline" data-testid="nav-logout-btn">Logout</button>
+      </div>
+
+      <!-- Cart Button -->
+      <button id="nav-cart-btn" class="btn btn-outline" data-testid="nav-cart-link">
+        Cart <span id="cart-count-badge" class="badge" data-testid="cart-count-badge">0</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Success Banner -->
+    <div id="notification-banner" class="notification-banner hidden"></div>
+
+    <!-- CATALOG VIEW -->
+    <section id="catalog-view">
+      <div class="catalog-header">
+        <h2>Products Catalog</h2>
+        <div class="sort-wrapper">
+          <label for="catalog-sort-select">Sort by:</label>
+          <select id="catalog-sort-select" class="select-input" data-testid="catalog-sort-select">
+            <option value="name-asc">Name: A to Z</option>
+            <option value="name-desc">Name: Z to A</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="catalog-container" class="product-grid" data-testid="catalog-container">
+        <!-- Product cards injected by JS -->
+      </div>
+    </section>
+
+    <!-- PRODUCT DETAIL VIEW -->
+    <section id="product-detail-view" class="product-detail-view hidden" data-testid="product-detail-view">
+      <button id="back-to-catalog-btn" class="btn btn-outline" style="margin-bottom: 1.5rem;" data-testid="back-to-catalog-btn">
+        ← Back to Catalog
+      </button>
+
+      <h2 id="product-detail-name" class="product-detail-name" data-testid="product-detail-name"></h2>
+      <p id="product-detail-description" class="product-detail-description" data-testid="product-detail-description"></p>
+      
+      <div id="product-detail-price" class="product-detail-price" data-testid="product-detail-price"></div>
+      <div id="product-detail-quantity" class="product-detail-quantity" data-testid="product-detail-quantity"></div>
+
+      <div class="quantity-control-group">
+        <label for="product-detail-quantity-input">Quantity:</label>
+        <input 
+          type="number" 
+          id="product-detail-quantity-input" 
+          class="text-input" 
+          data-testid="product-detail-quantity-input" 
+          value="1" 
+          min="1"
+        >
+        <div id="quantity-error-msg" class="error-message hidden" data-testid="quantity-error-msg"></div>
+      </div>
+
+      <button id="product-detail-add-btn" class="btn btn-primary" data-testid="product-detail-add-btn">
+        Add to Cart
+      </button>
+    </section>
+
+    <!-- CART VIEW -->
+    <section id="cart-container" class="cart-container hidden" data-testid="cart-container">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h2>Shopping Cart</h2>
+        <button id="cart-back-btn" class="btn btn-outline">Continue Shopping</button>
+      </div>
+
+      <div id="cart-items-wrapper">
+        <table class="cart-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Subtotal</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="cart-table-body">
+            <!-- Cart items injected by JS -->
+          </tbody>
+        </table>
+
+        <div class="cart-total-section">
+          <span>Total:</span>
+          <span id="cart-total-price" data-testid="cart-total-price">$0.00</span>
+        </div>
+
+        <div id="cart-auth-warning" class="cart-auth-warning hidden" data-testid="cart-auth-warning">
+          Please <a id="cart-login-link">Login</a> or <a id="cart-register-link">Register</a> to proceed with checkout.
+        </div>
+
+        <button id="purchase-btn" class="btn btn-primary" style="width: 100%; padding: 0.75rem;" data-testid="purchase-btn" disabled>
+          Purchase
+        </button>
+      </div>
+
+      <div id="empty-cart-message" class="hidden" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+        Your cart is empty.
+      </div>
+    </section>
+  </main>
+
+  <!-- AUTH MODAL -->
+  <div id="auth-modal" class="modal-overlay hidden" data-testid="auth-modal">
+    <div class="modal-content">
+      <button id="auth-modal-close" class="modal-close-btn">&times;</button>
+      <h3 id="auth-modal-title" style="margin-bottom: 1.25rem;">Login</h3>
+
+      <form id="auth-form">
+        <div class="form-group">
+          <label for="auth-username-input">Username</label>
+          <input 
+            type="text" 
+            id="auth-username-input" 
+            class="text-input" 
+            data-testid="auth-username-input" 
+            required 
+            autocomplete="username"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="auth-password-input">Password</label>
+          <input 
+            type="password" 
+            id="auth-password-input" 
+            class="text-input" 
+            data-testid="auth-password-input" 
+            required 
+            autocomplete="current-password"
+          >
+        </div>
+
+        <div id="auth-error-msg" class="error-message hidden" data-testid="auth-error-msg"></div>
+
+        <button 
+          type="submit" 
+          id="auth-submit-btn" 
+          class="btn btn-primary" 
+          data-testid="auth-submit-btn"
+        >
+          Login
+        </button>
+      </form>
+
+      <div class="modal-footer">
+        <span id="auth-switch-text">Don't have an account?</span>
+        <a id="auth-switch-mode-btn">Register</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
